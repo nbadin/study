@@ -20,24 +20,22 @@ module Exercise
         end
       end
 
-      def search(array, query)
-        index_counter = []
-        if array.empty? || array.size == 1 && array[0] != query
-          index_counter.push(-1)
+      def search(array, query, first = 0, last = array.size - 1)
+        return -1 if array.empty?
+        
+        middle_index = (first + last) / 2.0
+        middle_element = array[middle_index.round]
+         puts first, last, middle_index
+      
+        if middle_element == query
+          return middle_index.round
+        elsif first == last
+          return -1
+        elsif query > middle_element
+          return search(array, query, middle_index.round(half: :up), last)
         else
-          first = 0
-          last = array.size - 1
-          middle = array.size / 2
-          if array[middle] == query
-            index_counter.push(middle)
-          elsif query < array[middle]
-            index_counter.push(search(array[first, middle], query))
-          elsif query > array[middle]
-            index_counter.push(middle, search(array[middle, last], query))
-          end
+          return search(array, query, first, middle_index.round(half: :down))
         end
-        result = index_counter.last == -1 ? -1 : index_counter.sum
-        result
       end
     end
   end
