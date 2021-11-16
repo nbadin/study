@@ -25,7 +25,6 @@ module Exercise
         
         middle_index = (first + last) / 2.0
         middle_element = array[middle_index.round]
-         puts first, last, middle_index
       
         if middle_element == query
           return middle_index.round
