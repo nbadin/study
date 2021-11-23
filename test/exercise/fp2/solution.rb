@@ -5,26 +5,26 @@ module Exercise
       # Использовать свои написанные функции для реализации следующих - можно.
 
       # Написать свою функцию my_each
-      def my_each
-        for el in self do
-          yield el
-        end
+      def my_each(&block)
+        return self if self.empty?
+        block.call(self.first) 
+        MyArray.new(self[1..]).my_each(&block)
+        self
       end
 
       # Написать свою функцию my_map
       def my_map
-        result = MyArray.new
-        for el in self do
-          result << (yield el)
+        result = self.reduce(MyArray.new) do | acc, el |
+          acc << (yield el)
         end
         result
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        result = MyArray.new
-        self.my_each do | el |
-          result << el unless el.nil?
+        result = self.my_reduce(MyArray.new) do | acc, el |
+          acc << el unless el.nil?
+          acc
         end
         result
       end
