@@ -7,6 +7,7 @@ module Exercise
       # Написать свою функцию my_each
       def my_each(&block)
         return self if self.empty?
+
         block.call(self.first) 
         MyArray.new(self[1..]).my_each(&block)
         self
@@ -14,7 +15,7 @@ module Exercise
 
       # Написать свою функцию my_map
       def my_map
-        result = self.reduce(MyArray.new) do | acc, el |
+        result = self.my_reduce(MyArray.new) do | acc, el |
           acc << (yield el)
         end
         result
@@ -30,18 +31,16 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(acc=nil)
+      def my_reduce(acc=nil, &func)
         if acc.nil?
-          acc = self.first
-          self[1..].my_each do | el |
-            acc = yield acc, el
-          end
-        else
-          self.my_each do | el |
-            acc = yield acc, el
-          end
+          return MyArray.new(self[1..]).my_reduce(self[0], &func)
         end
-        acc
+
+        self.my_each do | el |
+          acc = yield acc, el
+        end
+
+        return acc
       end
     end
   end
